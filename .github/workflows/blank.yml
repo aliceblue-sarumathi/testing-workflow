@@ -22,4 +22,4 @@ jobs:
           port: ${{ secrets.SSH_PORT }} # If needed
           script: |
             echo "Hello, world."
-            # Add any other commands you want to execute on the remote server
+            mkdir -p /home/azad/worked
