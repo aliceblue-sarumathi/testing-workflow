@@ -17,7 +17,7 @@ jobs:
           SSH_HOSTNAME: ${{ secrets.SSH_HOSTNAME }}
           SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
           SSH_PORT: ${{ secrets.SSH_PORT }}
-        continue-on-error: true # Continue to next step even if SSH login fails
+        continue-on-error: false # Continue to next step even if SSH login fails
 
   ssh_key_test:
     runs-on: ubuntu-latest
