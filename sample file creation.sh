@@ -1,3 +1,3 @@
 #!/bin/bash 
 
-echo "This push is working"
+mkdir ~/test
