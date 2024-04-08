@@ -1,31 +1,34 @@
-name: Deploy to Ubuntu Server
+name: SSH Test
 
 on:
   push:
-    branches:
-      - main  # Change this to your main branch
+    branches: [main] # Change this to match your branch
 
 jobs:
-  deploy:
+  sshpass_test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install SSH and sshpass
+      - name: Check SSH login with sshpass
         run: |
-          sudo apt-get install -y openssh-client sshpass
+          echo "Trying SSH login with sshpass"
+          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USERNAME@$SSH_HOSTNAME "echo SSH login successful"
+        env:
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_HOSTNAME: ${{ secrets.SSH_HOSTNAME }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        continue-on-error: true # Continue to next step even if SSH login fails
 
-      - name: SSH into server and run commands
+  ssh_key_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check SSH login with SSH key
         run: |
-         sshpass -p "${{ secrets.PASSWORD }}" ssh -T -p "${{ secrets.SSH_PORT }}" -o StrictHostKeyChecking=no "${{ secrets.SSH_USERNAME }}"@"${{ secrets.SSH_HOST }}" << EOF
-          cd /var/www/bot/pranav  # Specify the deployment directory here
-          git pull origin main  # Replace 'main' with your branch if it's different
-          if [ $? -eq 0 ]; then
-            echo "Success"
-          else
-            echo "Failed to pull code"
-            exit 1
-          fi
-          EOF
+          echo "Trying SSH login with SSH key"
+          ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USERNAME@$SSH_HOSTNAME "echo SSH login successful"
+        env:
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_HOSTNAME: ${{ secrets.SSH_HOSTNAME }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PORT: ${{ secrets.SSH_PORT }}
+        continue-on-error: true # Continue to next step even if SSH login fails
