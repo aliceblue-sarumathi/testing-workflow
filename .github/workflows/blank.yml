@@ -3,7 +3,7 @@ name: SSH Action
 on:
   push:
     branches:
-      - main
+      - test
 
 jobs:
   deploy:
