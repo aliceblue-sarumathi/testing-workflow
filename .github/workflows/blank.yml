@@ -19,7 +19,8 @@ jobs:
 
       - name: SSH into server and run commands
         run: |
-         ssh -T -p "${{ secrets.SSH_PORT }}" -o StrictHostKeyChecking=no "${{ secrets.SSH_USERNAME }}"@"${{ secrets.SSH_HOST }}"
+         sshpass -p "${{ secrets.PASSWORD }}" \
+         ssh -T -p "${{ secrets.SSH_PORT }}" -o StrictHostKeyChecking=no "${{ secrets.SSH_USERNAME }}"@"${{ secrets.SSH_HOST }}" << EOF
           cd /var/www/bot/pranav  # Specify the deployment directory here
           git pull origin main  # Replace 'main' with your branch if it's different
           if [ $? -eq 0 ]; then
