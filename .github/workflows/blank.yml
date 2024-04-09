@@ -20,4 +20,5 @@ jobs:
 
     - name: SSH into server and run commands
       run: |
-        ssh -p 20202 nallen@223.31.190.212 'bash -s' < deploy_script.sh
+        ssh -p 20202 nallen@223.31.190.212 
+        ip a
