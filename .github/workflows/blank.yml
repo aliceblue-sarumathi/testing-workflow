@@ -1,18 +1,23 @@
-name: SSH Test
+name: Deploy to Server
 
 on:
   push:
-    branches: [main] # Change this to match your branch
+    branches:
+      - main
 
 jobs:
-  sshpass_test:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-       - name: executing remote ssh commands using ssh key
-         uses: appleboy/ssh-action@v1.0.3
-         with:
-            host: ${{ secrets.SSH_HOST }}
-            username: ${{ secrets.SSH_USER }}
-            password: ${{ secrets.SSH_PASSWORD }}
-            port: 20202
-            script: whoami
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install SSH key
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: SSH into server and run commands
+      run: |
+        ssh -p 20202 nallen@223.31.190.212 'bash -s' < deploy_script.sh
