@@ -8,27 +8,11 @@ jobs:
   sshpass_test:
     runs-on: ubuntu-latest
     steps:
-      - name: Check SSH login with sshpass
-        run: |
-          echo "Trying SSH login with sshpass"
-          sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USERNAME@$SSH_HOSTNAME "echo SSH login successful"
-        env:
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          SSH_HOSTNAME: ${{ secrets.SSH_HOSTNAME }}
-          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
-        continue-on-error: false # Continue to next step even if SSH login fails
-
-  ssh_key_test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check SSH login with SSH key
-        run: |
-          echo "Trying SSH login with SSH key"
-          ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SSH_USERNAME@$SSH_HOSTNAME "echo SSH login successful"
-        env:
-          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          SSH_HOSTNAME: ${{ secrets.SSH_HOSTNAME }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_PORT: ${{ secrets.SSH_PORT }}
-        continue-on-error: true # Continue to next step even if SSH login fails
+       - name: executing remote ssh commands using ssh key
+         uses: appleboy/ssh-action@v1.0.3
+         with:
+            host: ${{ secrets.SSH_HOST }}
+            username: ${{ secrets.SSH_USER }}
+            key: ${{ secrets.SSH_PRIVATE_KEY }}
+            port: ${{ secrets.SSH_PORT }}
+            script: whoami
