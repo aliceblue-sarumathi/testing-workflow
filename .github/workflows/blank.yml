@@ -15,5 +15,5 @@ jobs:
 
     - name: SSH into server and run commands
       run: |
-       sshpass -p '@lice_21109' ssh -p 20202 nallen@223.31.190.212 'touch /home/nallen/sample.txt'
+         mkdir -p /home/test/working
 
