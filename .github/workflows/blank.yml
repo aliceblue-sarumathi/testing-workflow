@@ -13,12 +13,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install SSH key
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
     - name: SSH into server and run commands
       run: |
-        ssh -p 20202 nallen@223.31.190.212 'touch /home/nallen/sample.txt'
+       sshpass -p '@lice_21109' ssh -p 20202 nallen@223.31.190.212 'touch /home/nallen/sample.txt'
 
